@@ -17,8 +17,8 @@ String lang = "en";
 String payload;
 String prevCmd;
 String prevArg;
-char argChar;
-char prevArgChar;
+//char argChar;
+//char prevArgChar;
 char charBuff;
 char breakChar;
 int defaultDelay = 0;
@@ -235,7 +235,11 @@ void delivery (String fileName) {
       parseCmd(dataFile);
 
       if (cmd == "GUI" || cmd == "WINDOWS") {
-        if (breakChar == ' ') {
+        parseArg(dataFile);
+        arg = arg + '\n';
+        cmdKeyCombo(KEY_LEFT_GUI, arg);
+      }
+      /*  if (breakChar == ' ') {
           argChar = dataFile.read();
           cmdGui(argChar);
           //just to remove trailing \n
@@ -245,7 +249,7 @@ void delivery (String fileName) {
           cmdGui(0x00);
         }
 
-      }
+      } */
       else if (cmd == "DELAY") {
         parseArg(dataFile);
         cmdDelay(arg);
@@ -395,7 +399,7 @@ void delivery (String fileName) {
 
 void cmdRepeat (String arg_l) {
   int counter = arg_l.toInt();
-  argChar = prevArgChar;
+//  argChar = prevArgChar;
 
   while (counter) {
     if (defaultDelay != 0) {
@@ -406,10 +410,12 @@ void cmdRepeat (String arg_l) {
     arg = prevArg;
 
     counter -= 1;
-
+    
     if (prevCmd == "GUI" || prevCmd == "WINDOWS") {
-      cmdGui(prevArgChar);
+      //cmdGui(prevArgChar);
+      cmdKeyCombo(KEY_LEFT_GUI, prevArg);
     }
+    
     else if (prevCmd == "DELAY") {
       cmdDelay(prevArg);
     }
@@ -541,7 +547,7 @@ void cmdDelay (String arg_l) {
   prevArg = arg_l;
   arg = "";
 }
-
+/*
 void cmdGui (char argChar_l) {
   Keyboard.press(KEY_LEFT_GUI);
   delay(100);
@@ -556,7 +562,7 @@ void cmdGui (char argChar_l) {
   prevArgChar = argChar_l;
   argChar = 0x00;
 }
-
+*/
 void cmdPressKey(int key) {
   //Keyboard.press(key);
   pressChar(convertLangChar(key));
